@@ -83,9 +83,13 @@ tests use generated finite examples; plots/tables use aggregate findings.
 
 For the complete declared comparison after preparation, run `make reproduce`.
 Then `make verify analyses` checks the newly generated certificates/witnesses and
-recomputes sampling/support analyses. Choose fresh `RUN_DIR`, `CHECK_DIR`,
-`FOLLOWUP_DIR` and `FIG_DIR` under `results/` when repeating commands; existing
-records are preserved. Defaults are already ignored by Git.
+recomputes sampling/support analyses. For repeats, use fresh ignored names such as
+`RUN_DIR=results/reproduced-02`, `CHECK_DIR=results/verification-02`,
+`FOLLOWUP_DIR=results/followup-checks-02` and `FIG_DIR=results/displays-02`.
+`SUPPORT_DIR` defaults beneath `RUN_DIR`; existing records are preserved.
+The ignore rules cover these prefixes, not every directory under `results/`.
+Add an ignore rule before using other names for prepared cases or detailed runs;
+keep the selected scientific summaries, figures and tables tracked.
 
 Substantive comparison checks the published scientific summaries: discrete radii,
 verdicts and counts must agree exactly; fitted floating quantities use relative

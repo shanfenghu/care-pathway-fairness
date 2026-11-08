@@ -74,9 +74,12 @@ are not substituted into those summaries or plots.
 
 `LINKAGE_RAW_ROOT` and `LINKAGE_PROCESSED_ROOT` select local input directories.
 `RUN_DIR` defaults to `results/reproduced`; `SUPPORT_DIR` to its `support/`.
-`CHECK_DIR`, `FOLLOWUP_DIR` and `FIG_DIR` select fresh output directories under
-`results/`. Existing outputs are preserved. Private historical source versions
-are unnecessary: the included source records under `data/generation-sources/`
+For repeated commands, keep the ignored output prefixes: for example,
+`RUN_DIR=results/reproduced-02`, `CHECK_DIR=results/verification-02`,
+`FOLLOWUP_DIR=results/followup-checks-02` and `FIG_DIR=results/displays-02`.
+`SUPPORT_DIR` defaults beneath `RUN_DIR`. Other custom names are not automatically
+ignored; add an ignore rule before generating data-derived cases or detailed runs.
+Existing outputs are preserved. The source records under `data/generation-sources/`
 are our software provenance, not provider data. The declared source amendments
 retain strict checks on mathematical method/protocol identities.
 
