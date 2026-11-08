@@ -1,0 +1,179 @@
+"""Current fixed-query comparison, including the frozen additional-noise draws."""
+import argparse
+from fractions import Fraction
+import hashlib
+import json
+from math import inf
+from pathlib import Path
+from statistics import median
+from time import perf_counter
+import numpy as np
+from scipy.optimize import linear_sum_assignment
+from linkage_bounds.profile_robustness import (Problem,build_model,independent_conditions,
+                                             verify_lp_certificate,verify_permutation)
+from linkage_bounds.count_robustness import solve_count_radius,count_constraints
+from linkage_bounds.robustness_integer_proof import verify_integer_tree
+from linkage_bounds.robustness_audit import audit_curve
+
+from paths import ROOT, PROCESSED
+from source_versions import load_bundle
+PROJECT=ROOT
+OLD=ROOT/'results/query-development'
+OUT=ROOT/'results/joint-query-validation'
+PROTOCOL=ROOT/'configs/query-refinement.json'
+METHOD=ROOT/'src/linkage_bounds/count_robustness.py'
+def digest(path):return hashlib.sha256(path.read_bytes()).hexdigest()
+
+def save(path,value):
+    if path.exists():raise FileExistsError('Preserve evidence: '+str(path))
+    path.parent.mkdir(parents=True,exist_ok=True)
+    path.write_text(json.dumps(value,indent=2,allow_nan=False)+'\n')
+
+def problem(case):
+    return Problem(np.array(case['groups']),np.array(case['flags']),np.array(case['proposal']),
+                   np.array(case['left_blocks']),np.array(case['right_blocks']))
+
+def load():
+    return load_bundle(OUT, PROTOCOL, PROJECT)
+
+def prepare():
+    # Existing neutral preparation contains the identical frozen rosters/training.
+    from cases import roster_data,comparison_features
+    from linkers import corrupt,nonconformity
+    from paths import PROCESSED
+    protocol=json.loads(PROTOCOL.read_text());assert digest(METHOD)==protocol['method_source_sha256']
+    from cases import prepare_cases
+    primary_started=perf_counter();cases,exclusions=prepare_cases()
+    if exclusions:raise ValueError('Unexpected support exclusions')
+    primary_seconds=perf_counter()-primary_started;extra=[]
+    started=perf_counter()
+    for meta,left,_,groups,flags,truth,_,_,models in roster_data():
+        if meta['id'] not in protocol['fresh_noise_seeds']:continue
+        seed=protocol['fresh_noise_seeds'][meta['id']]
+        if meta['id'].startswith('mimic'):
+            profiles=json.loads((PROCESSED/'linkage-profiles.json').read_text())['datasets']
+            pr=next(x for x in profiles if 'MIMIC' in x['name'])['profiles']
+            training=[pr[i] for i in meta['training_indices']]
+        else:
+            data=json.loads((PROCESSED/'prepared-records.json').read_text())
+            training=[r['profile'] for r in data['main'][612:712]]
+        vocab=[sorted({r['attributes'][k] for r in training}) for k in range(len(training[0]['attributes']))]
+        rng=np.random.default_rng(seed);feed=corrupt(left,rng,vocab,shifted=meta['family']=='shifted')
+        order=rng.permutation(len(left));right=[feed[j] for j in order]
+        z=flags[:,truth][:,order];reference=np.argsort(order)
+        for linker in ('fs','logistic'):
+            tick=perf_counter()
+            score=nonconformity(left,right,models['fs'],True) if linker=='fs' else -np.einsum(
+                'ijk,k->ij',comparison_features(left,right),models['beta'],optimize=False)
+            p=linear_sum_assignment(score)[1]
+            extra.append(dict(meta={**meta,'id':meta['id']+'-routing-confirmation','noise_seed':seed,
+                                   'support':'complete','linker':linker,'confirmation':True},
+                groups=groups.tolist(),flags=z.tolist(),truth=reference.tolist(),proposal=p.tolist(),
+                left_blocks=[0]*len(left),right_blocks=[0]*len(left),
+                startup={**models['summary'],'prediction_seconds':perf_counter()-tick},
+                identity_errors=int(np.count_nonzero(p!=reference)),
+                source_profile_errors=int(np.any(z[:,p]!=z[:,reference],axis=0).sum())))
+    assert len(extra)==4 and len(cases)==24
+    sources=[PROJECT/'src/linkage_bounds'/n for n in
+             ['profile_robustness.py','count_robustness.py','robustness_integer_proof.py','robustness_audit.py']]
+    sources += [Path(__file__),PROJECT/'experiments/joint_queries/cases.py',
+                PROJECT/'experiments/joint_queries/linkers.py']
+    save(OUT/'cases.json',dict(cases=cases+extra,
+        primary_common_preparation_seconds=primary_seconds,
+        fresh_noise_preparation_seconds=perf_counter()-started,protocol_sha256=digest(PROTOCOL),
+        sources=[dict(path=p.relative_to(PROJECT).as_posix(),sha256=digest(p)) for p in sources]))
+    print('Frozen 24 unchanged primary and four new-noise proposals after the common rule was fixed.',flush=True)
+
+def run():
+    bundle=load();rng=np.random.default_rng(json.loads(PROTOCOL.read_text())['primary_method_order_seed'])
+    for index,case in enumerate(bundle['cases']):
+        p=problem(case)
+        for rep in range(3):
+            path=OUT/'runs'/f'case-{index:02d}-rep-{rep}.json'
+            if path.exists():raise FileExistsError('Use a new run; do not silently mix timings')
+            results=[]
+            for delta in ('1/20','1/10'):
+                for method in rng.permutation(['profile','assignment','mes']).tolist():
+                    results.append(solve_count_radius(p,delta,method))
+            save(path,dict(case_index=index,repetition=rep,cases_sha256=digest(OUT/'cases.json'),results=results))
+        print('Rerouted',index+1,'/',len(bundle['cases']),flush=True)
+
+def check():
+    bundle=load();counts=dict(outputs=0,closed=0,LP_certificates=0,integer_trees=0,witnesses=0)
+    old=json.loads((OLD/'count-summary.json').read_text())['rows']
+    for index,case in enumerate(bundle['cases']):
+        p=problem(case)
+        for rep in range(3):
+            record=json.loads((OUT/'runs'/f'case-{index:02d}-rep-{rep}.json').read_text())
+            assert record['cases_sha256']==digest(OUT/'cases.json')
+            for delta in ('1/20','1/10'):
+                results=[r for r in record['results'] if r['delta']==delta]
+                assert {r['method'] for r in results}=={'profile','assignment','mes'}
+                known={(r['lower'],r['upper'],r['rigorous_invariant']) for r in results if r['bracket_closed']}
+                assert len(known)<=1
+                for r in results:
+                    caps=p.caps(delta);inside=bool(np.all(abs(p.values(p.proposal))<=caps))
+                    scalar=independent_conditions(p,caps)
+                    S=min((min(x['negative'],x['positive']) for x in scalar),default=inf) if inside else max(x['enter'] for x in scalar)
+                    if r['route']=='scalar_invariant':assert S==inf and r['rigorous_invariant']
+                    elif r['route'] in ('scalar_violation','scalar_entry'):
+                        assert inside==(r['route']=='scalar_violation')
+                        assert r['lower']==r['upper']==S and r['geometry']['variables']==0
+                    else:
+                        model=build_model(p,r['method']);C,lo,hi=count_constraints(p,model,caps)
+                        B=np.r_[C,-C];d=np.r_[hi,-lo];L=max(S,2)
+                        certificate=r['branches'][0]['certificate']
+                        if certificate is not None:L=max(L,verify_lp_certificate(model,B,d,certificate));counts['LP_certificates']+=1
+                        for proof in r['proof_parts']:
+                            if proof['complete']:
+                                verify_integer_tree(model,B,d,r['upper'],proof['tree']);L=r['upper'];counts['integer_trees']+=1
+                        assert (L==inf)==r['rigorous_invariant']
+                        if L<inf:assert L==r['lower']
+                    if r['upper'] is not None:
+                        assert verify_permutation(p,r['witness'],caps,inside)[0]==r['upper'];counts['witnesses']+=1
+                    counts['outputs']+=1;counts['closed']+=r['bracket_closed']
+                    if index<24:
+                        previous=next(x for x in old if x['case_index']==index and x['delta']==delta)['methods'][r['method']]
+                        assert (r['lower'],r['upper'],r['rigorous_invariant'])==(
+                            previous['lower'],previous['upper'],previous['rigorous_invariant'])
+    save(OUT/'verification.json',dict(**counts,all_primary_endpoints_unchanged=True))
+    print(json.dumps(counts),flush=True)
+
+def summarise():
+    bundle=load();rows=[]
+    for index,case in enumerate(bundle['cases']):
+        p=problem(case);runs=[json.loads((OUT/'runs'/f'case-{index:02d}-rep-{rep}.json').read_text()) for rep in range(3)]
+        for delta in ('1/20','1/10'):
+            methods={};scalar_times=[]
+            for _ in range(3):
+                tick=perf_counter();independent_conditions(p,p.caps(delta));scalar_times.append(perf_counter()-tick)
+            for method in ('profile','assignment','mes'):
+                repeated=[next(r for r in run['results'] if r['delta']==delta and r['method']==method) for run in runs]
+                r=repeated[0];times=[x['total_seconds'] for x in repeated]
+                methods[method]={k:r[k] for k in ['lower','upper','rigorous_invariant','bracket_closed','route','geometry']}
+                methods[method].update(total_seconds_median=median(times),total_seconds_range=[min(times),max(times)])
+            r=next(r for r in runs[0]['results'] if r['delta']==delta and r['method']=='profile')
+            truth_inside=bool(np.all(abs(p.values(np.asarray(case['truth'])))<=p.caps(delta)))
+            rows.append(dict(case_index=index,**case['meta'],delta=delta,methods=methods,
+                baseline_inside=r['baseline_inside'],truth_inside=truth_inside,point_correct=r['baseline_inside']==truth_inside,
+                identity_errors=case['identity_errors'],source_profile_errors=case['source_profile_errors'],
+                separate_lower=r['separate_lower'],separate_invariant=r['separate_invariant'],
+                separate_seconds_median=median(scalar_times),startup=case['startup'],
+                audit=audit_curve(p.n,case['identity_errors'],r['lower'],r['rigorous_invariant']),
+                separate_audit=audit_curve(p.n,case['identity_errors'],r['separate_lower'],r['separate_invariant'])))
+    save(OUT/'summary.json',dict(rows=rows,primary_common_preparation_seconds=bundle['primary_common_preparation_seconds'],
+                               fresh_noise_preparation_seconds=bundle['fresh_noise_preparation_seconds']))
+    for extra in (False,True):
+        for dataset in ('MIMIC-IV Demo2.2','eICU Demo2.0.1'):
+            selected=[r for r in rows if bool(r.get('confirmation'))==extra and r['dataset']==dataset]
+            print(json.dumps(dict(dataset=dataset,confirmation=extra,instances=len(selected),
+                gains=sum(not r['methods']['profile']['rigorous_invariant'] and r['methods']['profile']['lower']>r['separate_lower'] for r in selected),
+                scalar_entry=sum(r['methods']['profile']['route']=='scalar_entry' for r in selected),
+                batch_times={m:sum(r['methods'][m]['total_seconds_median'] for r in selected) for m in methods})),flush=True)
+
+if __name__=='__main__':
+    parser=argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('action',choices=['prepare','run','check','summarise'])
+    parser.add_argument('--output',type=Path,default=OUT)
+    args=parser.parse_args();OUT=args.output.resolve()
+    globals()[args.action]()

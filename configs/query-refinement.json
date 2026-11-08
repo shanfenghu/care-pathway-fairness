@@ -1,0 +1,15 @@
+{
+  "fresh_noise_seeds": {
+    "mimic-101201-base": 2026110712,
+    "eicu-128-shifted": 2026110713
+  },
+  "primary_method_order_seed": 2026110482,
+  "fixed_tolerances": [
+    "1/20",
+    "1/10"
+  ],
+  "repetitions": 3,
+  "method_source_sha256": "0545de62a373a8df6b44cf46dd96637a0ac88ba97c95cdd662fa794baea4ebc4",
+  "profile_source_sha256": "8eaebb09a92f426de78a706ae8277f13f0c52e4f90fed3cb038d72a2e58fbcc5",
+  "scope": "Fixed common scalar routing and exact integer windows; additional noise on reused people, not a new population."
+}

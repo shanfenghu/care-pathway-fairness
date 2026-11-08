@@ -1,0 +1,52 @@
+{
+  "case_indices": [
+    10,
+    11,
+    14,
+    15,
+    18,
+    19,
+    22,
+    23
+  ],
+  "merge_widths": [
+    1,
+    4,
+    16,
+    "all"
+  ],
+  "chain_seeds": [
+    2026110501,
+    2026110502
+  ],
+  "endpoint_chains": "shared original and all-label endpoints; two intermediate chains",
+  "tolerances": [
+    "1/20",
+    "1/10"
+  ],
+  "methods": [
+    "profile",
+    "assignment",
+    "mes"
+  ],
+  "method_order_seed": 2026110503,
+  "repetitions": 3,
+  "construction": "Sort original labels; independently seeded permutation for each chain and roster; merge consecutive chunks of width 1,4,16,all. Same mapping for both linkers within a roster. Endpoints evaluated once; interior identical supports retained as design cells, with unique support count disclosed.",
+  "information_budget": "All eight original eICU recorded-label proposals, both fixed tolerances; no retraining, rescoring, extra identity labels or change to query profiles.",
+  "uncertainty": "Two predetermined merge orders assess construction sensitivity; three repeats assess host timing variation only. Dependent reused cohorts, linkers, tolerances, endpoints and merge chains are not independent patients or a population sample. No inferential CI/p-value. Retain every unresolved bracket and result.",
+  "interpretation": "Across levels support changes the scientific uncertainty family; rho must be nonincreasing as support enlarges, but gain, routing and runtime need not be monotone. Compare encoding speed only within identical support. Original identifiers are not verified physical hospitals. Two merge chains are construction replication, not independent clinical confirmation. No deployment or natural-linkage-error claim.",
+  "pinned_inputs": [
+    {
+      "path": "src/linkage_bounds/count_robustness.py",
+      "sha256": "0545de62a373a8df6b44cf46dd96637a0ac88ba97c95cdd662fa794baea4ebc4"
+    },
+    {
+      "path": "src/linkage_bounds/profile_robustness.py",
+      "sha256": "8eaebb09a92f426de78a706ae8277f13f0c52e4f90fed3cb038d72a2e58fbcc5"
+    },
+    {
+      "path": "src/linkage_bounds/robustness_integer_proof.py",
+      "sha256": "4f2090d8ac4519bdf4eb21c71fc99d55cda8605f10a072833b1d8daa16d7e8fe"
+    }
+  ]
+}

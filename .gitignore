@@ -1,0 +1,13 @@
+# Environments, bytecode and local caches.
+.venv/
+.cache/
+__pycache__/
+*.py[cod]
+*.egg-info/
+# Raw/prepared inputs and generated checks/runs.
+data/raw/
+data/processed/
+results/reproduced*/
+results/verification*/
+results/displays*/
+results/followup-checks*/

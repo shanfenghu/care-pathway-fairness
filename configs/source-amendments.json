@@ -1,0 +1,27 @@
+{
+  "schema": 1,
+  "scope": "Exact generation-to-active source amendments; no changed outcomes or replacement timings implied.",
+  "amendments": [
+    {
+      "path": "experiments/joint_queries/run_queries.py",
+      "generation_sha256": "87083f04f8a25840ed08cde1dea8a13728e04e268c3874bc5e1c05de57af723d",
+      "active_sha256": "0089c4b1be7bfb75e99d02e69b50e2c928f6ff41fee85e38b10dab2b509a3a72",
+      "generation_source": "data/generation-sources/run_queries.py.txt",
+      "reason": "Rebuild workloads from provider inputs without requiring a distributed earlier case database; recorded endpoint comparison retained."
+    },
+    {
+      "path": "experiments/joint_queries/run_support.py",
+      "generation_sha256": "fdf4f52034c3f677f337c0652802d32d9944ec7e345b9ce3d79b7410a3cbdf2d",
+      "active_sha256": "18abca8b33dea13b1e10d66c161cd78e185ca5fb0167e809567e07950e809cc7",
+      "generation_source": "data/generation-sources/run_support.py.txt",
+      "reason": "Use explicit source-version validation for retained records and frozen protocol pins; numerical checks and generation choices unchanged."
+    },
+    {
+      "path": "src/linkage_bounds/profile_robustness.py",
+      "generation_sha256": "8eaebb09a92f426de78a706ae8277f13f0c52e4f90fed3cb038d72a2e58fbcc5",
+      "active_sha256": "10c29717d173bbedf4debb20dd18cba923e464e66f9d942b37e8be167750d6e5",
+      "generation_source": "data/generation-sources/profile_robustness.py.txt",
+      "reason": "Reject fractional/nonfinite/nonbinary input and fractional permutation values before integer conversion."
+    }
+  ]
+}

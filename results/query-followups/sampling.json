@@ -1,0 +1,16 @@
+{
+  "summary": {
+    "workloads": 56,
+    "finite": 40,
+    "finite_smaller_frame": 4,
+    "invariant": 16,
+    "half_budget_improved": 4,
+    "half_budget_harmed": 0,
+    "all_integer_budget_improvement_points": 332,
+    "all_integer_budget_harm_points": 214,
+    "global_half_budget_median": 0.0,
+    "frame_half_budget_median": 1.005080515528913e-18,
+    "95_unattainable_global": 31,
+    "95_unattainable_frame": 31
+  }
+}

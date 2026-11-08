@@ -1,0 +1,151 @@
+"""Fixed-proposal nested complete-block support comparison; no retraining."""
+import argparse
+import hashlib
+import json
+from math import inf
+from pathlib import Path
+from statistics import median
+import numpy as np
+from linkage_bounds.profile_robustness import (Problem,build_model,independent_conditions,
+    verify_lp_certificate,verify_permutation)
+from linkage_bounds.count_robustness import solve_count_radius,count_constraints
+from linkage_bounds.robustness_integer_proof import verify_integer_tree
+
+from paths import ROOT
+OUT=ROOT/'results/support-validation'
+PROTOCOL=ROOT/'configs/support-comparison.json'
+OLD=ROOT/'results/joint-query-validation/cases.json'
+def sha(p):return hashlib.sha256(p.read_bytes()).hexdigest()
+
+def save(p,x):
+    p.parent.mkdir(parents=True,exist_ok=True)
+    with p.open('x') as f:json.dump(x,f,indent=2,allow_nan=False);f.write('\n')
+
+def problem(c):return Problem(*(np.asarray(c[k]) for k in ('groups','flags','proposal','left_blocks','right_blocks')))
+
+def load():
+    b=json.loads((OUT/'cases.json').read_text());assert sha(PROTOCOL)==b['protocol_sha256']
+    for r in b['sources']:assert sha(ROOT/r['path'])==r['sha256']
+    return b
+
+def prepare():
+    cfg=json.loads(PROTOCOL.read_text())
+    for r in cfg['pinned_inputs']:assert sha(ROOT/r['path'])==r['sha256']
+    original=json.loads(OLD.read_text())['cases'];cases=[]
+    for idx in cfg['case_indices']:
+        c=original[idx];p=problem(c);labels=sorted(set(c['left_blocks'])|set(c['right_blocks']))
+        assert np.array_equal(p.left_blocks,p.right_blocks[p.proposal])
+        assert np.array_equal(p.left_blocks,p.right_blocks[np.asarray(c['truth'])])
+        for chain in ['shared',0,1]:
+            widths=[1,'all'] if chain=='shared' else [4,16]
+            order=labels if chain=='shared' else np.random.default_rng(cfg['chain_seeds'][chain]).permutation(labels).tolist()
+            for width in widths:
+                step=len(labels) if width=='all' else width
+                mapping={v:i//step for i,v in enumerate(order)}
+                new={**c,'left_blocks':[mapping[v] for v in c['left_blocks']],
+                     'right_blocks':[mapping[v] for v in c['right_blocks']],
+                     'study':dict(original_case=idx,chain=chain,width=width)}
+                q=problem(new)
+                assert np.array_equal(q.values(q.proposal),p.values(p.proposal))
+                assert np.array_equal(q.values(np.asarray(c['truth'])),p.values(np.asarray(c['truth'])))
+                assert np.array_equal(q.left_blocks,q.right_blocks[np.asarray(c['truth'])])
+                support=(q.left_blocks[:,None]==q.right_blocks[None,:])
+                oldsupport=(p.left_blocks[:,None]==p.right_blocks[None,:])
+                assert np.all(~oldsupport|support)
+                # Canonical support digest counts identical partitions without naming labels.
+                new['study'].update(support_sha256=hashlib.sha256(support.tobytes()).hexdigest(),
+                    block_count=len(set(new['left_blocks'])),potential_assignment=int(support.sum()),
+                    potential_profile=build_model(q,'profile').geometry['variables'])
+                cases.append(new)
+    paths=[Path(__file__),PROTOCOL,OLD]+[ROOT/'src/linkage_bounds'/n for n in
+        ['count_robustness.py','profile_robustness.py','robustness_integer_proof.py']]
+    save(OUT/'cases.json',dict(protocol_sha256=sha(PROTOCOL),cases=cases,
+         sources=[dict(path=str(p.relative_to(ROOT)),sha256=sha(p)) for p in paths]))
+    print('Prepared',len(cases),'case/support cells before solving',flush=True)
+
+def run():
+    b=load();cfg=json.loads(PROTOCOL.read_text());rng=np.random.default_rng(cfg['method_order_seed'])
+    for i,c in enumerate(b['cases']):
+        p=problem(c)
+        for rep in range(cfg['repetitions']):
+            results=[]
+            for delta in cfg['tolerances']:
+                for method in rng.permutation(cfg['methods']).tolist():
+                    results.append(solve_count_radius(p,delta,method))
+            save(OUT/'runs'/f'case-{i:02d}-rep-{rep}.json',dict(case_index=i,repetition=rep,
+                cases_sha256=sha(OUT/'cases.json'),results=results))
+        print('Finished',i+1,'/',len(b['cases']),flush=True)
+
+def check():
+    b=load();cfg=json.loads(PROTOCOL.read_text());counts=dict(outputs=0,closed=0,witnesses=0,LP_certificates=0,integer_trees=0)
+    rows=[]
+    for i,c in enumerate(b['cases']):
+        p=problem(c)
+        records=[json.loads((OUT/'runs'/f'case-{i:02d}-rep-{rep}.json').read_text()) for rep in range(cfg['repetitions'])]
+        assert all(r['cases_sha256']==sha(OUT/'cases.json') for r in records)
+        for delta in cfg['tolerances']:
+            methods={}
+            for method in cfg['methods']:
+                repeated=[next(r for r in rec['results'] if r['delta']==delta and r['method']==method) for rec in records]
+                for r in repeated:
+                    caps=p.caps(delta);inside=bool(np.all(abs(p.values(p.proposal))<=caps))
+                    scalar=independent_conditions(p,caps)
+                    S=min(min(s['negative'],s['positive']) for s in scalar) if inside else max(s['enter'] for s in scalar)
+                    assert (S==inf)==r['separate_invariant']
+                    assert r['separate_lower']==(None if S==inf else S)
+                    if r['route']=='scalar_invariant':assert S==inf and r['rigorous_invariant']
+                    elif r['route'] in ('scalar_entry','scalar_violation'):
+                        assert inside==(r['route']=='scalar_violation')
+                        assert r['lower']==r['upper']==S and r['geometry']['variables']==0
+                    else:
+                        model=build_model(p,method);C,lo,hi=count_constraints(p,model,caps);B=np.r_[C,-C];d=np.r_[hi,-lo]
+                        L=max(S,2);cert=r['branches'][0]['certificate']
+                        if cert is not None:L=max(L,verify_lp_certificate(model,B,d,cert));counts['LP_certificates']+=1
+                        for proof in r['proof_parts']:
+                            if proof['complete']:
+                                verify_integer_tree(model,B,d,r['upper'],proof['tree']);L=r['upper'];counts['integer_trees']+=1
+                        assert (L==inf)==r['rigorous_invariant']
+                        if L<inf:assert L==r['lower']
+                    if r['upper'] is not None:
+                        assert verify_permutation(p,r['witness'],caps,inside)[0]==r['upper'];counts['witnesses']+=1
+                    counts['outputs']+=1;counts['closed']+=r['bracket_closed']
+                endpoints={(r['lower'],r['upper'],r['rigorous_invariant']) for r in repeated}
+                assert len(endpoints)==1
+                r=repeated[0];times=[a['total_seconds'] for a in repeated]
+                methods[method]={k:r[k] for k in ['lower','upper','rigorous_invariant','bracket_closed','route','geometry']}
+                methods[method].update(median_seconds=median(times),range_seconds=[min(times),max(times)])
+            endpoints={(m['lower'],m['upper'],m['rigorous_invariant']) for m in methods.values() if m['bracket_closed']}
+            assert len(endpoints)<=1
+            r=records[0]['results'][0]
+            # Read scalar bounds for this tolerance, not the first result's tolerance.
+            r=next(x for x in records[0]['results'] if x['delta']==delta and x['method']=='profile')
+            rows.append(dict(study_case=i,**c['study'],meta=c['meta'],n=p.n,delta=delta,methods=methods,
+                separate_lower=r['separate_lower'],separate_invariant=r['separate_invariant'],
+                baseline_inside=r['baseline_inside'],truth_inside=bool(np.all(abs(p.values(np.asarray(c['truth'])))<=p.caps(delta)))))
+    # Every declared chain is nested, and exact radii cannot increase under support enlargement.
+    chain_checks=0
+    for idx in cfg['case_indices']:
+        for chain in [0,1]:
+            cells=[next((j,c) for j,c in enumerate(b['cases']) if c['study']==c['study'] and
+                  c['study']['original_case']==idx and c['study']['width']==w and
+                  c['study']['chain']==('shared' if w in [1,'all'] else chain)) for w in cfg['merge_widths']]
+            supports=[(problem(c).left_blocks[:,None]==problem(c).right_blocks[None,:]) for _,c in cells]
+            assert all(np.all(~a|d) for a,d in zip(supports,supports[1:]))
+            for delta in cfg['tolerances']:
+                rs=[next(r for r in rows if r['study_case']==j and r['delta']==delta)['methods']['profile'] for j,_ in cells]
+                vals=[inf if r['rigorous_invariant'] else r['upper'] for r in rs]
+                assert all(r['bracket_closed'] for r in rs)
+                assert all(a>=d for a,d in zip(vals,vals[1:]));chain_checks+=1
+    save(OUT/'summary.json',dict(rows=rows))
+    save(OUT/'verification.json',dict(**counts,nested_monotonic_chains=chain_checks,
+        unique_case_supports=len({(c['study']['original_case'],c['study']['support_sha256']) for c in b['cases']}),
+        protocol_sha256=sha(PROTOCOL),cases_sha256=sha(OUT/'cases.json')))
+    print(json.dumps(counts),flush=True)
+
+if __name__=='__main__':
+    parser=argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('action',choices=['prepare','run','check'])
+    parser.add_argument('--source',type=Path,default=OLD.parent)
+    parser.add_argument('--output',type=Path,default=OUT)
+    args=parser.parse_args();OLD=args.source.resolve()/'cases.json';OUT=args.output.resolve()
+    globals()[args.action]()

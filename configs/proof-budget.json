@@ -1,0 +1,21 @@
+{
+  "status": "data-informed numerical-certification refinement, frozen before its outcomes",
+  "trigger": "The initial fixed suite has seven finite unclosed radius brackets; numerical joint effects are not yet rigorous lower-bound gains. All three formulations agree numerically",
+  "unchanged": [
+    "populations and new noise",
+    "point linkers",
+    "candidate support",
+    "two tolerances",
+    "opposite-output task",
+    "baseline information",
+    "initial results and negative findings"
+  ],
+  "refinement": "For every finite unclosed bracket in every method and repetition, prove absence of integer points with cost <= attaining upper radius minus one by bounded branch-and-bound; each leaf requires a separately checked bounded-box infeasibility certificate",
+  "limits": {
+    "seconds_per_unclosed_bracket": 2,
+    "nodes_per_unclosed_bracket": 128
+  },
+  "fairness": "same proof limits, solver, branching rule, checks and accounting for profile, direct assignment and MES representations; retain unresolved proof attempts",
+  "new_checks": "fresh small finite-world cases under seed 2026110362; reject corrupt or incomplete proof trees; do not call reused clinical cases fresh confirmation",
+  "scope": "Fixed numerical refinement under the same query contract; no new task or metric."
+}

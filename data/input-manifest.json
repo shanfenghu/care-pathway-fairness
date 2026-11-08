@@ -1,0 +1,50 @@
+{
+  "files": [
+    {
+      "path": "mimic-iv-demo-2.2-files/hosp/patients.csv.gz",
+      "bytes": 1083,
+      "sha256": "59dcc6cd8450ddf03ad32cc7d76e41caa4c9633541715987f590c74835cf6fae",
+      "url": "https://physionet.org/files/mimic-iv-demo/2.2/hosp/patients.csv.gz"
+    },
+    {
+      "path": "mimic-iv-demo-2.2-files/hosp/admissions.csv.gz",
+      "bytes": 11072,
+      "sha256": "910b9f160ffdf1e08ea673585393f347c773ccc87d66875c627584a903ae8493",
+      "url": "https://physionet.org/files/mimic-iv-demo/2.2/hosp/admissions.csv.gz"
+    },
+    {
+      "path": "mimic-iv-demo-2.2-files/icu/icustays.csv.gz",
+      "bytes": 5667,
+      "sha256": "e05e81aa52a3022e522b6832a898101a69b84e64c17bb344d819e458d5bc21b3",
+      "url": "https://physionet.org/files/mimic-iv-demo/2.2/icu/icustays.csv.gz"
+    },
+    {
+      "path": "mimic-iv-demo-2.2-files/icu/procedureevents.csv.gz",
+      "bytes": 44817,
+      "sha256": "37454f286dc1eee6cef666b4fdf91452eb8bea6bfc3cf98d4ad179ebb4a741fa",
+      "url": "https://physionet.org/files/mimic-iv-demo/2.2/icu/procedureevents.csv.gz"
+    },
+    {
+      "path": "eicu-crd-demo-2.0.1-files/patient.csv.gz",
+      "bytes": 136791,
+      "sha256": "15e1eb52169828e3cfff3b67132a087298de4d0365bbb31bb294f6043bffd474",
+      "url": "https://physionet.org/files/eicu-crd-demo/2.0.1/patient.csv.gz"
+    },
+    {
+      "path": "eicu-crd-demo-2.0.1-files/lab.csv.gz",
+      "bytes": 5729763,
+      "sha256": "e06852850abeb65211bc22ac43f17121ba41b14656fac862396449af84d8273a",
+      "url": "https://physionet.org/files/eicu-crd-demo/2.0.1/lab.csv.gz"
+    },
+    {
+      "path": "eicu-crd-demo-2.0.1-files/treatment.csv.gz",
+      "bytes": 460899,
+      "sha256": "daefee030fa1ad29593dce880ad86bdfbdbb1e33fcb3e78fa21d71cb01a08628",
+      "url": "https://physionet.org/files/eicu-crd-demo/2.0.1/treatment.csv.gz"
+    }
+  ],
+  "licence": "ODbL-1.0; see LICENSES/ODbL-1.0.txt and data/ATTRIBUTION.md",
+  "open_access": true,
+  "credentials_required": false,
+  "raw_inputs_bundled": false
+}

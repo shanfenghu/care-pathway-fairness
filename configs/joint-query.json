@@ -1,0 +1,87 @@
+{
+  "status": "Fixed configurations retained from the original controlled evaluation.",
+  "question": "Exact compact processing of joint recorded-indicator comparisons under bounded linkage changes",
+  "task": {
+    "cohort_indicators": [
+      "recorded female",
+      "recorded age at least 65"
+    ],
+    "source_indicators": "Three fixed source indicators per database; see docs/joint-queries.md.",
+    "condition": "all six absolute recorded rate contrasts are within the specified tolerance",
+    "tolerances": [
+      "1/20",
+      "1/10"
+    ],
+    "tolerance_justification": "investigator-specified sensitivity settings of 5 and 10 percentage points, inherited diagnostics; neither clinical standards nor significance thresholds",
+    "output": "minimum changed proposed pairs to reverse this Boolean condition, attaining permutation, independently checked feasible values and rigorous lower bracket where available",
+    "support": "complete balanced rosters; additional complete within-hospital blocks when visible hospital labels on both sides retain the known reference matching",
+    "unsupported": [
+      "arbitrary sparse candidate graphs",
+      "unmatched or many-to-one rosters",
+      "noisy verification",
+      "individual continuous query weights"
+    ]
+  },
+  "data": {
+    "MIMIC": "the first two existing 40-train/60-test person splits, seeds 101201 and 101202",
+    "eICU": "natural within-admission 30-train/225-test roster, separate-admission 18-person control, and existing 100-train/128-test roster",
+    "corruptions": "base and shifted for MIMIC and 128-person eICU; new frozen seeds 2026110400 plus case index; retain actual cross-stay profiles for the two natural controls",
+    "training_corruptions": "base corruption only, seed 2026110310 plus roster index; never use test outcomes or keys as score features",
+    "dependence": "all populations reused; overlapping MIMIC splits and shared eICU training remain dependent. New noise is held out from tuning but is not a new clinical cohort",
+    "hospital_metadata_preflight": "2520 unit stays, 186 hospitals, no missing hospital IDs; all 255 prepared natural pairs retain hospital. This check used identifiers only, not query outcomes"
+  },
+  "point_proposals": {
+    "models": [
+      "existing add-one Fellegi-Sunter comparison weights",
+      "L2-regularised logistic comparison model"
+    ],
+    "logistic_tuning": "lambda in [0.1,1,10], first 75 percent of a fixed random person split for fitting and remaining persons for validation; balanced pair log loss; refit on all training people",
+    "gold_information": "same known training correspondences; cross-person negatives implied by the complete training roster; count original known matches, not all implied negative pairs",
+    "features": "same age-agreement bins and categorical equality/missingness bins; no query flags, identity keys or test labels"
+  },
+  "comparisons": [
+    "profile-compressed integer transport with free baseline-cell capacity and unit-cost overflow",
+    "direct record-level assignment MILP",
+    "matching-restricted MES negative log likelihood with common epsilon=0.1 and n proposed-positive pair labels; explicit mathematical adaptation, not reproduction of published software",
+    "exact independent-condition radii under the same complete/block-complete support"
+  ],
+  "evidence_and_cost": {
+    "timing_repetitions": 3,
+    "method_order_seed": 2026110360,
+    "per_query_MIP_seconds": 5,
+    "LP_seconds_per_branch": 2,
+    "include": [
+      "profile/edge representation construction",
+      "model construction",
+      "solver time",
+      "LP-bound construction",
+      "integer dual checking",
+      "witness lifting and original-space checking"
+    ],
+    "shared_startup": [
+      "retained input loading",
+      "roster/feature preparation",
+      "tuning and fitting",
+      "known training-match count"
+    ],
+    "audit_baselines": "exact finite-population upper-error test allowing observed errors versus zero-error-only acceptance, at alpha=0.05; sample fractions 0.1,0.25,0.5,0.75,1; use checked lower radius bounds for assurance",
+    "uncertainty": "exact conditional sample probabilities; paired per-instance timing medians/ranges across repetitions; no independent-patient confidence interval from overlapping rosters",
+    "do_not_claim": [
+      "clinical parity",
+      "natural linkage error rates",
+      "human review accuracy or seconds",
+      "posterior correctness from MES",
+      "cheap verification from solver compression"
+    ]
+  },
+  "checks": [
+    "small block-complete exhaustive worlds",
+    "original-space witness checker",
+    "integer LP dual-bound checker including corruption rejection",
+    "sparse three-cycle failure",
+    "singleton degeneration",
+    "LP fractionality",
+    "infeasibility and unresolved statuses",
+    "audit risk inversion"
+  ]
+}
