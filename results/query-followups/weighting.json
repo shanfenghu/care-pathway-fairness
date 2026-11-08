@@ -1,4 +1,7 @@
 {
+  "dependent_design_workloads": 96,
+  "distinct_queries": 60,
+  "all_coincident_endpoints_agree": true,
   "summary": [
     {
       "width": 1,
@@ -44,5 +47,428 @@
         574.5439004500173
       ]
     }
-  ]
+  ],
+  "distinct_task_cells": [
+    {
+      "key_sha256": "654b635f0989913fbe22458204878ef1f1f5e1c01d6f80de456994732f27817b",
+      "width": 1,
+      "design_cells": 2,
+      "timing_samples_per_method": 6,
+      "paired_ratio": 0.9681600207910568
+    },
+    {
+      "key_sha256": "bb5f912a8e439d71c3592642c58c1449de79f92c46b5f0a1de3a3eac88398da3",
+      "width": 1,
+      "design_cells": 2,
+      "timing_samples_per_method": 6,
+      "paired_ratio": 0.9927205216504575
+    },
+    {
+      "key_sha256": "427977bf88bf8ec5cbdd7c44af55aac2a0c9a2709c645377b59591ecbe5b4c73",
+      "width": "all",
+      "design_cells": 2,
+      "timing_samples_per_method": 6,
+      "paired_ratio": 574.5439004500173
+    },
+    {
+      "key_sha256": "2cb751e519999685d2a8088924dc39a0325c386f475326b64980b7d5cde80403",
+      "width": "all",
+      "design_cells": 2,
+      "timing_samples_per_method": 6,
+      "paired_ratio": 1.0149642155106973
+    },
+    {
+      "key_sha256": "412777c0b1bc8a8a8f5d83d29ff18736a42219bef8764844d2db2edf372bd5f6",
+      "width": 4,
+      "design_cells": 2,
+      "timing_samples_per_method": 6,
+      "paired_ratio": 0.9973628677101741
+    },
+    {
+      "key_sha256": "2205d5be58d28129fd68fe879b555326d05b3955659153d110234f44f7164591",
+      "width": 4,
+      "design_cells": 2,
+      "timing_samples_per_method": 6,
+      "paired_ratio": 1.0195458109506461
+    },
+    {
+      "key_sha256": "f187434b28592af9dc48f33eb44b5944e4c780f1c48914c97d27c8a39a7f47ee",
+      "width": 16,
+      "design_cells": 2,
+      "timing_samples_per_method": 6,
+      "paired_ratio": 10.55394282550845
+    },
+    {
+      "key_sha256": "071fdf01027d8d5b13ec94575b2b26f0e91faa6b448cc9c80d94d33c20f38a0e",
+      "width": 16,
+      "design_cells": 2,
+      "timing_samples_per_method": 6,
+      "paired_ratio": 0.9382086437821184
+    },
+    {
+      "key_sha256": "ccfc509fad217d036577906d8352bd1707347564042c679ca42c5ce922493596",
+      "width": 4,
+      "design_cells": 2,
+      "timing_samples_per_method": 6,
+      "paired_ratio": 4.903685728605732
+    },
+    {
+      "key_sha256": "7093427dd8281b99cf08f9ed784e810e1f5d6c2f8e66f5cf3e4009621627e7a5",
+      "width": 4,
+      "design_cells": 2,
+      "timing_samples_per_method": 6,
+      "paired_ratio": 0.9828312094663816
+    },
+    {
+      "key_sha256": "ad34e557d923145ad822e1d937484e006cb091e85b2670e2446e904802aa455f",
+      "width": 16,
+      "design_cells": 2,
+      "timing_samples_per_method": 6,
+      "paired_ratio": 29.330113574311138
+    },
+    {
+      "key_sha256": "2bf5c4e182eeff60b14e826a8123947cfa508b14547d94bdc539c36230d98405",
+      "width": 16,
+      "design_cells": 2,
+      "timing_samples_per_method": 6,
+      "paired_ratio": 0.9247183052700078
+    },
+    {
+      "key_sha256": "50cce91687cdd6e1d0b24ab48f2adcb0d3917037869aa2254284e1cdaeb22d19",
+      "width": 1,
+      "design_cells": 2,
+      "timing_samples_per_method": 6,
+      "paired_ratio": 1.0034999061888055
+    },
+    {
+      "key_sha256": "494bf393c12705ad8cbbdb82b76b4cd88f9e8ec941f7c6f449c05475899cdeb0",
+      "width": 1,
+      "design_cells": 2,
+      "timing_samples_per_method": 6,
+      "paired_ratio": 0.9957227527845185
+    },
+    {
+      "key_sha256": "f451393f1ec7df062815fb235256ba637adcb1f758482ab2d71d33a78c4b23b3",
+      "width": "all",
+      "design_cells": 2,
+      "timing_samples_per_method": 6,
+      "paired_ratio": 0.9940726807531993
+    },
+    {
+      "key_sha256": "f21ede17b73f52743265a57a6498a38bc46b94549ba5edf26ae836000aeaf157",
+      "width": "all",
+      "design_cells": 2,
+      "timing_samples_per_method": 6,
+      "paired_ratio": 1.0226633270755727
+    },
+    {
+      "key_sha256": "1c73044d8e82985a6de14d8418c31142d5ef6f0b4999ad51c9578109c5e3312c",
+      "width": 4,
+      "design_cells": 2,
+      "timing_samples_per_method": 6,
+      "paired_ratio": 1.0217641279862606
+    },
+    {
+      "key_sha256": "9856c29abdfea09982d3e3b24881cf8d1f9fed08e3c010e83d6a1dee09d60656",
+      "width": 4,
+      "design_cells": 2,
+      "timing_samples_per_method": 6,
+      "paired_ratio": 1.0125182746738524
+    },
+    {
+      "key_sha256": "e4c2e694a465a67e4a056933c33e58d17353a04fce1909111812d1f7a04fb34d",
+      "width": 16,
+      "design_cells": 2,
+      "timing_samples_per_method": 6,
+      "paired_ratio": 1.0536983678065128
+    },
+    {
+      "key_sha256": "a63bf331b3b861f1b5e72b74bb52e5970707a6f7aa11fabdb59583be8d1d6e73",
+      "width": 16,
+      "design_cells": 2,
+      "timing_samples_per_method": 6,
+      "paired_ratio": 1.0071711974778463
+    },
+    {
+      "key_sha256": "188323ecc8280b776f7b07607a651e6082631069f5412c999ab8d31284a14f30",
+      "width": 4,
+      "design_cells": 2,
+      "timing_samples_per_method": 6,
+      "paired_ratio": 1.0433442067641365
+    },
+    {
+      "key_sha256": "aaddfae806f209ae9d3cd602c20eefbe66fc8811d3571ee667971de2c08e947f",
+      "width": 4,
+      "design_cells": 2,
+      "timing_samples_per_method": 6,
+      "paired_ratio": 1.004445671155466
+    },
+    {
+      "key_sha256": "362a9eac5828015026cf220afec5a34372a1dbc03f4d9dd7873c30d87ee92dad",
+      "width": 16,
+      "design_cells": 2,
+      "timing_samples_per_method": 6,
+      "paired_ratio": 0.9974636435794282
+    },
+    {
+      "key_sha256": "0cf78304f6839c0b1db06e5938db05e0b8116df37b5a8f18acefa0299061f96e",
+      "width": 16,
+      "design_cells": 2,
+      "timing_samples_per_method": 6,
+      "paired_ratio": 1.0200746272696721
+    },
+    {
+      "key_sha256": "4c0697957cc9edf280db91f86e47b522009172e24d64625f45358b83c36a3d15",
+      "width": 1,
+      "design_cells": 2,
+      "timing_samples_per_method": 6,
+      "paired_ratio": 1.0053257253850305
+    },
+    {
+      "key_sha256": "3b76784be7ca1db5dceba5d2234faa252a6f8882b96ca576a15ecfda1e64acf2",
+      "width": 1,
+      "design_cells": 2,
+      "timing_samples_per_method": 6,
+      "paired_ratio": 0.9898578795011149
+    },
+    {
+      "key_sha256": "8733d0f6aaa38e458822ee390cdad87a1b3cdd35cd0d0d76a00c650fb3e16b6f",
+      "width": "all",
+      "design_cells": 2,
+      "timing_samples_per_method": 6,
+      "paired_ratio": 187.57052528969297
+    },
+    {
+      "key_sha256": "20a99e0520554a738379e57e04c49ee204544f78834fa0c94378e1342bce2a71",
+      "width": "all",
+      "design_cells": 2,
+      "timing_samples_per_method": 6,
+      "paired_ratio": 207.5173565940368
+    },
+    {
+      "key_sha256": "c974116497707ee39aa7d26481b4c857a7f9270eb15dcf9b158e9d5f4aefc3fd",
+      "width": 4,
+      "design_cells": 2,
+      "timing_samples_per_method": 6,
+      "paired_ratio": 1.3913372960458397
+    },
+    {
+      "key_sha256": "7793df66e7acf7b30de399c1e3c8e3fd243756756349130e6e29487bf4d97d5a",
+      "width": 4,
+      "design_cells": 2,
+      "timing_samples_per_method": 6,
+      "paired_ratio": 0.9928502169603894
+    },
+    {
+      "key_sha256": "6e062d72b416ed98176a3248a186795ad6e7c76cbcd913905d92a17fa1071721",
+      "width": 16,
+      "design_cells": 2,
+      "timing_samples_per_method": 6,
+      "paired_ratio": 2.9260381745069237
+    },
+    {
+      "key_sha256": "c716180377f08fa2f360d8a9dec5914299a0f67156abf221e54c140cf8e2edc8",
+      "width": 16,
+      "design_cells": 2,
+      "timing_samples_per_method": 6,
+      "paired_ratio": 12.088250617001256
+    },
+    {
+      "key_sha256": "c10aa373c75353c1c224a4b60fe43b5474bf223239e9b9505b105f85dd22dbe4",
+      "width": 4,
+      "design_cells": 2,
+      "timing_samples_per_method": 6,
+      "paired_ratio": 2.3410050968204947
+    },
+    {
+      "key_sha256": "4db23d6963b0e1cacd446fea2e67ab1cf80d63d16494993f680b0516e52c2832",
+      "width": 4,
+      "design_cells": 2,
+      "timing_samples_per_method": 6,
+      "paired_ratio": 0.9858746468266741
+    },
+    {
+      "key_sha256": "40b786157f9ecb6132eb50347b8095a2588986fe6a8031a4f487bb3833c40184",
+      "width": 16,
+      "design_cells": 2,
+      "timing_samples_per_method": 6,
+      "paired_ratio": 5.669191661184993
+    },
+    {
+      "key_sha256": "f45ae5093e56884e0f829b4c673190cf210425d4b18a23c468b0d7762b3917e9",
+      "width": 16,
+      "design_cells": 2,
+      "timing_samples_per_method": 6,
+      "paired_ratio": 0.9677752837209731
+    },
+    {
+      "key_sha256": "271e57b985a9286d0e527e64221a557c6c0c2209fcbe771a9ab9d60abccb0b6e",
+      "width": 1,
+      "design_cells": 1,
+      "timing_samples_per_method": 3,
+      "paired_ratio": 1.0268358825319
+    },
+    {
+      "key_sha256": "e9eaa7b0957cc2e37b5dc52d1a40d37629830e44c190e7d448d934f5669bceec",
+      "width": 1,
+      "design_cells": 1,
+      "timing_samples_per_method": 3,
+      "paired_ratio": 0.9857108442871173
+    },
+    {
+      "key_sha256": "3f2f8f8b6c136858fa48f393269e196e40494c7e8060fce7602d859b2caf4c9c",
+      "width": "all",
+      "design_cells": 1,
+      "timing_samples_per_method": 3,
+      "paired_ratio": 257.1759295069849
+    },
+    {
+      "key_sha256": "3ddd938345a521dcd18538b8f7c56b075b1ab4620a7e5f6ae39f725e5855effc",
+      "width": "all",
+      "design_cells": 1,
+      "timing_samples_per_method": 3,
+      "paired_ratio": 46.92957219571777
+    },
+    {
+      "key_sha256": "57993e16cb7e8a6df37972b64f377f5a2dca83605514288b4fde6802e6302c26",
+      "width": 4,
+      "design_cells": 1,
+      "timing_samples_per_method": 3,
+      "paired_ratio": 1.1799506451611097
+    },
+    {
+      "key_sha256": "50d2de9595878da421393e995b0a9adb760278bd97b60c6661d1aa5dfaaea2c4",
+      "width": 4,
+      "design_cells": 1,
+      "timing_samples_per_method": 3,
+      "paired_ratio": 0.9762212890428116
+    },
+    {
+      "key_sha256": "6da06e1bd6cd6086c59eacb7b73032515d942e28b45b434f833665dfc4d37260",
+      "width": 16,
+      "design_cells": 1,
+      "timing_samples_per_method": 3,
+      "paired_ratio": 14.428883742638059
+    },
+    {
+      "key_sha256": "ce68ad1ce2bfe9dc3f527d22cd95f6561793289b1560a8b8b5bb8123762b5bf0",
+      "width": 16,
+      "design_cells": 1,
+      "timing_samples_per_method": 3,
+      "paired_ratio": 5.97165884758384
+    },
+    {
+      "key_sha256": "325660326e76ff103c2b38582a5946e5161c185c610e35c71b729b3c08be0df0",
+      "width": 4,
+      "design_cells": 1,
+      "timing_samples_per_method": 3,
+      "paired_ratio": 1.5142447883179526
+    },
+    {
+      "key_sha256": "335760ad3cd4ddac2211c271f011ba88370140b08901ec73bf4dc1458e6d4a60",
+      "width": 4,
+      "design_cells": 1,
+      "timing_samples_per_method": 3,
+      "paired_ratio": 0.9819148242368231
+    },
+    {
+      "key_sha256": "df3e0e3cf0bebc5eefff7695488a7b4ccdb6e75755ad5a28c986d06d6718f1da",
+      "width": 16,
+      "design_cells": 1,
+      "timing_samples_per_method": 3,
+      "paired_ratio": 14.652203727206134
+    },
+    {
+      "key_sha256": "ab7ffff87b5f3905d3807d4847d1ac40236bc1d2c768519e1fe8b034daca77c1",
+      "width": 16,
+      "design_cells": 1,
+      "timing_samples_per_method": 3,
+      "paired_ratio": 1.089528666831121
+    },
+    {
+      "key_sha256": "f15d7e54eb997d0091352e64c1fec395c05cf6e4a9880ceb664792890a81e312",
+      "width": 1,
+      "design_cells": 1,
+      "timing_samples_per_method": 3,
+      "paired_ratio": 1.0297813452529159
+    },
+    {
+      "key_sha256": "9bcfb9fb7745bc88a104df2f4aa60cafeba4e94c9e583fc1f21b8edb5250307d",
+      "width": 1,
+      "design_cells": 1,
+      "timing_samples_per_method": 3,
+      "paired_ratio": 0.9945242806429355
+    },
+    {
+      "key_sha256": "5966ba2d8fe7e2cf582fa3a5d3d1c2572c867df02d5772cd725553019d9055a0",
+      "width": "all",
+      "design_cells": 1,
+      "timing_samples_per_method": 3,
+      "paired_ratio": 273.0946650772543
+    },
+    {
+      "key_sha256": "3ee8e30e06a6cc330aab29009ace343d3eeb48209f6d775b8b90872be9b2feb3",
+      "width": "all",
+      "design_cells": 1,
+      "timing_samples_per_method": 3,
+      "paired_ratio": 97.43540504495954
+    },
+    {
+      "key_sha256": "442d8ee0b91081b2e7d1f170ccd478dd39d9eb2f05a9fb464179e608420ccaf1",
+      "width": 4,
+      "design_cells": 1,
+      "timing_samples_per_method": 3,
+      "paired_ratio": 1.2085401480278217
+    },
+    {
+      "key_sha256": "9475049671ac159060ab9b748351c10cb284f798f08d38a2391a16c6dfb0db4a",
+      "width": 4,
+      "design_cells": 1,
+      "timing_samples_per_method": 3,
+      "paired_ratio": 1.0244110344544088
+    },
+    {
+      "key_sha256": "63817c16d57a7da9e94b3d84442eca19a618899f1a2138506e2c95e5583c2d9c",
+      "width": 16,
+      "design_cells": 1,
+      "timing_samples_per_method": 3,
+      "paired_ratio": 6.133369612265595
+    },
+    {
+      "key_sha256": "ef41bb5ce688cf92b094c89c4efe9a2cb4edf50d6db63f946b4871a22828f639",
+      "width": 16,
+      "design_cells": 1,
+      "timing_samples_per_method": 3,
+      "paired_ratio": 13.722371218829712
+    },
+    {
+      "key_sha256": "5802f1ecc20e3bbe435fd18df701bea3892c47345153ce15e6b145ec10c66dfd",
+      "width": 4,
+      "design_cells": 1,
+      "timing_samples_per_method": 3,
+      "paired_ratio": 1.5654739149110204
+    },
+    {
+      "key_sha256": "15b20e6a7ef910259d064dfa06c02757447d54a983e80070771f11c2ccf778c5",
+      "width": 4,
+      "design_cells": 1,
+      "timing_samples_per_method": 3,
+      "paired_ratio": 0.9905352234290072
+    },
+    {
+      "key_sha256": "611858dd7b69edda94901d6f952cf16a65353ff5850e3125c6a73f1e24978968",
+      "width": 16,
+      "design_cells": 1,
+      "timing_samples_per_method": 3,
+      "paired_ratio": 11.118567285593786
+    },
+    {
+      "key_sha256": "af728035bc19b457e2deb49fb468d0aa40504191547cbee06c5371b032e9f2d0",
+      "width": 16,
+      "design_cells": 1,
+      "timing_samples_per_method": 3,
+      "paired_ratio": 0.9029748032920641
+    }
+  ],
+  "interpretation": "Exploratory reweighting of fixed retained timings; no new solve/timing/data. Compare regime/heterogeneity, not sampling significance or clinical prevalence."
 }

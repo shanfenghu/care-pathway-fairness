@@ -5,6 +5,24 @@ several recorded group-rate comparisons. Profile transport, direct assignment
 and a matching-restricted maximal error score adaptation solve the same task
 under balanced complete-block support. See [methods and assumptions](docs/joint-queries.md).
 
+## Included scientific outputs
+
+The selected outputs are included as files, alongside their generation scripts.
+`figures/joint-query/` contains PDF and PNG versions of `joint-example`,
+`checked-computation` and `audit-acceptance`. `tables/joint-query/` contains the
+readable `case-results.csv` and `workload-outcomes.csv` tables.
+
+`results/joint-query-validation/summary.json` retains all 56 query summaries,
+and `results/support-validation/summary.json` all 96 support-query summaries.
+`results/query-followups/` retains the 56-workload sampling curves and question
+budgets, same-frame controls and distinct-query weighting results, including
+adverse findings. Only the person-level sampling-frame indices are omitted.
+`results/query-summaries/illustration.json` retains the aggregate worked example;
+`results/query-development/` retains earlier endpoint and geometry summaries.
+These are scientific findings, distinct from provider input records. `make
+displays` regenerates the selected figures and tables; `make reproduce` followed
+by `make analyses` recomputes the analyses after original-provider acquisition.
+
 ## Setup and quick checks
 
 Install Python 3.12 and [uv](https://docs.astral.sh/uv/), then run:
