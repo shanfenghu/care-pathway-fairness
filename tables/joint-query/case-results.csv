@@ -1,10 +1,10 @@
 roster_support,linker,n,separate_bound,joint_radius,wrong_pairs,known_training_pairs
-MIMIC/complete,FS,60,8,10,6,40
-MIMIC/complete,Logistic,60,8,9,7,40
-MIMIC/complete,FS,60,4,5,4,40
+MIMIC 1/base/complete,FS,60,8,10,6,40
+MIMIC 1/base/complete,Logistic,60,8,9,7,40
+MIMIC 2/base/complete,FS,60,4,5,4,40
 eICU/complete,FS,225,10,10,57,30
-eICU/hospital,FS,225,10,12,4,30
+eICU/labels,FS,225,10,12,4,30
 eICU/complete,FS,128,8,8,27,100
-eICU/hospital,FS,128,inf,inf,4,100
-eICU/hospital,FS,18,inf,inf,0,30
+eICU/labels,FS,128,inf,inf,4,100
+eICU/labels,FS,18,inf,inf,0,30
 eICU/complete,Logistic,128,2,4,94,100

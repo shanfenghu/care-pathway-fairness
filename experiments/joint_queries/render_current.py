@@ -27,9 +27,9 @@ def render(output, check=False):
     display_sampling.FIGURES = figures
     display_sampling.main()
     rows = json.loads((ROOT/'results/joint-query-validation/summary.json').read_text())['rows']
-    selected = [(0,'MIMIC/complete'),(1,'MIMIC/complete'),(4,'MIMIC/complete'),
-                (8,'eICU/complete'),(10,'eICU/hospital'),(16,'eICU/complete'),
-                (18,'eICU/hospital'),(14,'eICU/hospital'),(27,'eICU/complete')]
+    selected = [(0,'MIMIC 1/base/complete'),(1,'MIMIC 1/base/complete'),(4,'MIMIC 2/base/complete'),
+                (8,'eICU/complete'),(10,'eICU/labels'),(16,'eICU/complete'),
+                (18,'eICU/labels'),(14,'eICU/labels'),(27,'eICU/complete')]
     output_rows = [['roster_support','linker','n','separate_bound','joint_radius',
                     'wrong_pairs','known_training_pairs']]
     for index, label in selected:

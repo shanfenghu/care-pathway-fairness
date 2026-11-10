@@ -16,7 +16,7 @@ def main():
     initial = json.loads(INITIAL.read_text())['rows']
     select = lambda i: next((r for r in rows if r['case_index'] == i and r['delta'] == '1/20'))
     indices = [0, 8, 10, 16, 18, 14]
-    labels = ['MIMIC 60\ncomplete', 'eICU 225\ncomplete', 'eICU 225\nhospital blocks', 'eICU 128\ncomplete', 'eICU 128\nhospital blocks', 'eICU 18\nhospital blocks']
+    labels = ['MIMIC 60\ncomplete', 'eICU 225\ncomplete', 'eICU 225\nlabel blocks', 'eICU 128\ncomplete', 'eICU 128\nlabel blocks', 'eICU 18\nlabel blocks']
     plt.rcParams.update({'font.family': 'DejaVu Sans', 'font.size': 9, 'axes.labelsize': 9, 'xtick.labelsize': 8, 'ytick.labelsize': 8.5, 'legend.fontsize': 8, 'pdf.fonttype': 42, 'ps.fonttype': 42, 'axes.spines.top': False, 'axes.spines.right': False})
     (fig, (ax, other)) = plt.subplots(1, 2, figsize=(7.16, 2.85), sharey=True)
     plotted = {i: {'timings_ms': {}} for i in indices}

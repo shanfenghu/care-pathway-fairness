@@ -9,6 +9,22 @@ from linkage_bounds.count_robustness import count_constraints,solve_count_radius
 
 
 class CountTests(unittest.TestCase):
+    def test_exact_tolerance_preserves_inclusive_boundary(self):
+        # Independent recorded contrast: (7*1 - 2*2)/(2*5) = 3/10.
+        problem=Problem(np.array([[1,1,0,0,0,0,0]]),
+                        np.array([[1,0,1,0,0,0,0]]),np.arange(7),
+                        np.zeros(7,dtype=int),np.zeros(7,dtype=int))
+        numerator=int(problem.values(problem.proposal)[0])
+        self.assertEqual(Fraction(numerator,2*5),Fraction(3,10))
+        for tolerance in ("3/10",Fraction(3,10)):
+            self.assertEqual(problem.caps(tolerance).tolist(),[3])
+            answer=solve_count_radius(problem,tolerance,'profile')
+            self.assertTrue(answer['baseline_inside'])
+            self.assertEqual((answer['lower'],answer['upper']),(2,2))
+        # Documented compatibility: Fraction(float) keeps the binary value.
+        self.assertLess(Fraction(0.3),Fraction(3,10))
+        self.assertEqual(problem.caps(0.3).tolist(),[2])
+
     def test_fresh_worlds_and_all_routes(self):
         rng=np.random.default_rng(2026110363);worlds=0;routes=set()
         inside=Problem(np.array([[1,1,0,0]]),np.array([[1,0,1,0]]),np.arange(4),np.zeros(4,dtype=int),np.zeros(4,dtype=int))

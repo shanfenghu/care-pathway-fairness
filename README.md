@@ -65,8 +65,10 @@ make analyses
 
 `make reproduce` builds 24 primary and four additional-noise proposals using the
 fixed seeds and training selections, both tolerances, three formulations and
-three repetitions, then runs the support and sampling controls. Scientific
-summary comparison requires exact discrete answers and permits relative 1e-6,
+three repetitions, then runs the support and sampling controls.
+The complete campaign produces 1,368 checked results: 504 in the main comparison
+and 864 in the support control, counting methods, tolerances and repetitions.
+Scientific summary comparison requires exact discrete answers and permits relative 1e-6,
 absolute 1e-8 differences in floating quantities; timings are excluded.
 `make verify` checks the newly generated witnesses/certificates without solving
 again. The original small summaries retain measured timing results; new timings
@@ -83,6 +85,41 @@ Existing outputs are preserved. The source records under `data/generation-source
 are our software provenance, not provider data. The declared source amendments
 retain strict checks on mathematical method/protocol identities.
 
+## Locate a question-budget result
+
+After `make analyses`, the new sampling results are in
+`results/followup-checks/sampling.json`; the separate-bound comparison is in
+`results/followup-checks/same-frame-control.json`. To inspect the blocked
+225-person, five-point example, run:
+
+```sh
+.venv/bin/python - results/followup-checks <<'PY'
+import json
+from pathlib import Path
+import sys
+
+root = Path(sys.argv[1])
+sampling = json.loads((root / "sampling.json").read_text())
+row = next(r for r in sampling["rows"]
+           if r["n"] == 225 and r["support"] == "hospital"
+           and r["linker"] == "fs" and r["delta"] == "1/20")
+control = json.loads((root / "same-frame-control.json").read_text())
+separate = next(r for r in control["rows"]
+                if r["case_index"] == row["case_index"]
+                and r["delta"] == row["delta"])
+print(row["minimum_budget"]["global_95"],
+      row["minimum_budget"]["frame_95"],
+      separate["minimum_budget"]["frame_separate_95"])
+print(sampling["summary"]["95_unattainable_global"],
+      sampling["summary"]["95_unattainable_frame"])
+PY
+```
+
+The expected lines are `136 72 82` and `31 31`. They distinguish the local
+question savings from the frequent failure to reach the 95% acceptance target.
+Use `results/query-followups` instead to inspect the included findings without
+recomputing them. If you set `FOLLOWUP_DIR`, pass that directory instead.
+
 ## Scope and interpretation
 
 The two public critical-care demos have distinct recording structures but reused
@@ -91,6 +128,11 @@ joint gains occur in seven of 48 primary and one of eight additional-noise
 workloads. Two additional-noise verdicts are wrong. Hospital blocking leaves
 little processing-time benefit. Neither sampling design reaches 95% acceptance
 in 31 of 40 finite workloads. Human review costs are unmeasured.
+
+A strict joint gain means that the exact joint radius is larger than the
+separate scalar lower bound for the same proposal, support and tolerance.
+The reported gains are finite; invariant cases are reported separately,
+and unresolved brackets are not claimed as exact radii.
 
 The algorithms require known sufficient profiles, intact source bundles and
 balanced complete blocks. Sparse candidates, missing true candidates, unmatched
