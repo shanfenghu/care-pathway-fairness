@@ -2,9 +2,10 @@
 
 Only these **open-access demo versions** are used. They do not require credentials
 or access to the full credentialed databases. The manifest pins seven compressed
-provider tables, totalling 6,390,092 bytes. `acquire_inputs.py fetch` downloads
-them from the versioned PhysioNet file service and verifies exact bytes.
-`verify` checks an existing input directory without network access.
+provider tables, totalling 6,390,092 bytes. From the repository root,
+`make fetch-data` downloads them from the versioned PhysioNet file service and
+verifies exact bytes. `make verify-data` checks an existing input directory
+without network access.
 
 MIMIC-IV Clinical Database Demo, version 2.2:
 Alistair Johnson, Lucas Bulgarelli, Tom Pollard, Steven Horng, Leo Anthony Celi

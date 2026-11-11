@@ -113,8 +113,9 @@ Analysis and Mitigation of Data Verification Errors, ICDE 2026, 1994–2007,
 DOI 10.1109/ICDE65706.2026.00151. It is adapted to this Boolean aggregate and
 matching-world support. That work's formal language is SPJU, and its authors
 explicitly outline aggregate extensions; this is a structured adaptation. Under
-independent symmetric proposed-positive LABEL errors with epsilon=0.1, negative
-log likelihood is a constant plus distance times log(9). Truth matchings remain
+a positive observed label assumed for every proposed-pair statement and
+independent symmetric label errors with epsilon=0.1, negative log likelihood is
+a constant plus distance times log(9). Truth matchings remain
 dependent. This is neither a new uncertainty metric, posterior correctness,
 published-software reproduction nor an independent third representation.
 Query-guided resolution follows Drien et al., PACMMOD 1(2), 2023, 1–27,

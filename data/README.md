@@ -68,9 +68,13 @@ admission, with ICU/procedure indicators at 24/72 hours. Seeded splits use 40
 training and 60 test people. eICU selection uses person keys and eligible visible
 profiles, never the query outcomes: ordered repeated-stay pairs use 30 training
 people; separate-admission and 128-person corrupted rosters are selected by the
-fixed rules in `prepare_stays.py`, `contexts.py` and `cases.py`. Sex and age groups,
-recorded expiry, missing discharge weight and creatinine within six hours define
-the eICU query. Source clocks and absent-interface limitations are retained.
+fixed rules in [prepare_stays.py](../experiments/joint_queries/prepare_stays.py),
+[contexts.py](../experiments/joint_queries/contexts.py) and
+[cases.py](../experiments/joint_queries/cases.py). Sex and age groups,
+recorded expiry, missing discharge weight and a recorded creatinine row with
+`labresultoffset` from 0 through 360 minutes after source-unit admission define
+the eICU query. This is draw time, not revised-entry time; a nonmissing lab value
+is not required. Source clocks and absent-interface limitations are retained.
 Preparation writes local workload/profile/record JSONs; it never commits them.
 
 ## Analysis and findings

@@ -126,7 +126,8 @@ The two public critical-care demos have distinct recording structures but reused
 people and overlapping splits; additional noise is not a new population. Strict
 joint gains occur in seven of 48 primary and one of eight additional-noise
 workloads. Two additional-noise verdicts are wrong. Hospital blocking leaves
-little processing-time benefit. Neither sampling design reaches 95% acceptance
+little processing-time benefit. Sixteen of the 56 workloads are invariant and need no pair checks;
+the remaining 40 have finite radii. Neither sampling design reaches 95% acceptance
 in 31 of 40 finite workloads. Human review costs are unmeasured.
 
 A strict joint gain means that the exact joint radius is larger than the
